@@ -11,7 +11,6 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.springframework.security.core.parameters.P;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -126,72 +125,64 @@ public class Parser {
 
         int i = 1;
         Parser p = new Parser();
-        String url_citilinc = "https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=" + String.valueOf(i);
-        String url_dns = "https://www.dns-shop.ru/catalog/17a8932c16404e77/sistemnye-bloki/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2";
+        String url_citilinc_pc = "https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=" + String.valueOf(i);
+        String url_citilinc_monitor = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors/?available=1&status=55395790&p=" + String.valueOf(i);
+        String url_citilinc_printer_lazer = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors_and_office/printers/?available=1&status=55395790&p=" + String.valueOf(i);
+        String url_citilinc_printer_struya = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors_and_office/ink_printers/?available=1&status=55395790&p=" + String.valueOf(i);
+        String url_dns_pc = "https://www.dns-shop.ru/catalog/17a8932c16404e77/sistemnye-bloki/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2";
+        String url_dns_monitor = "https://www.dns-shop.ru/catalog/17a8943716404e77/monitory/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2&q=%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80";
+        String url_dns_printer_lazer = "https://www.dns-shop.ru/catalog/17a8e00716404e77/lazernye-printery/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2&q=%D0%BF%D1%80%D0%B8%D0%BD%D1%82%D0%B5%D1%80";
+        String url_dns_printer_struya = "https://www.dns-shop.ru/catalog/17a8e07216404e77/strujnye-printery/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2&f[nz8]=9hd9&q=%D0%BF%D1%80%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%8B";
 
-//        String text = "процессор: Intel Core i7 7700; частота процессора: 3.6 ГГц (4.2 ГГц, в режиме Turbo); оперативная память: DIMM, DDR4 16384 Мб 2133 МГц; видеокарта: NVIDIA GeForce GTX 1070 — 8192 Мб; интегрированная графика: Intel HD Graphics 630; HDD: 1000 Гб, 7200 об/мин, SATA III; SSD: 240Гб";
-////        String text = "\tDIMM, DDR4 4096 Мб 2666 МГц";
-//        String[] split = text.split("; ");
-//        String model = "";
-//        String freq = "";
-//        String ram_size = "";
-//        String ram_model = "";
-//        String ram_ferq = "";
-//        String gpu_size = "";
-//        String gpu_model = "";
-//        String integr_gpu = "";
-//        String hdd_data = "";
-//        String ssd_data = "";
+//        String text = "технология печати: струйный, цветной, формат: A4, максимальная скорость печати (ЧБ) до 13 стр/мин, формата А4, USB, RJ-45, Wi-Fi, встроенная СНПЧ, двусторонняя печать";
+//        String[] split = text.split(", ");
+//        String type = "";
+//        String color = "";
+//        String format = "";
+//        String max_print_speed = "";
+//        String connector = "";
+//        String CISS = "";
+//        String two_sided_printing = "";
+//
+//
 //        for (String str : split) {
-//            if (str.contains("процессор: ")) {
-//                model = str.replace("процессор: ", "");
+//            if (str.contains("технология печати: ")) {
+//                type = str.replace("технология печати: ", "");
 //            }
-//            if (str.contains("частота процессора: ")) {
-//                freq = str.replace("частота процессора: ", "").substring(0, 6);
+//            if (str.contains("цветной") || str.contains("черно-белый")) {
+//                color = str.trim();
 //            }
-//            if (str.contains("оперативная память: ")) {
-//                String text1 = str.replace("оперативная память: ", "");
-//                Pattern pattern = Pattern.compile("\\d+\\s+Мб");
-//                Matcher matcher = pattern.matcher(text1);
-//                matcher.find();
-//                ram_size = text1.substring(matcher.start(), matcher.end() - 6) + " ГБ";
-//                ram_model = text1.substring(0, matcher.start());
-//                ram_ferq = text1.substring(matcher.end());
+//            if (str.contains("формат: ")) {
+//                format = str.replace("формат: ", "");
+//            }
+//            if (str.contains("максимальная скорость печати ")) {
+//                max_print_speed = str.replace("максимальная скорость печати ", "");
 //
 //            }
-//            if (str.contains("видеокарта: ")) {
-//                String text1 = str.replace("видеокарта: ", "");
-//                Pattern pattern = Pattern.compile("\\d+\\s+Мб");
-//                Matcher matcher = pattern.matcher(text1);
-//                matcher.find();
-//                gpu_size = text1.substring(matcher.start(), matcher.end() - 6) + " ГБ";
-//                gpu_model = text1.substring(0, matcher.start() - 3);
+//            if (str.contains("USB") || str.contains("RJ-45") || str.contains("Wi-Fi") || str.contains("LPT") || str.contains("LPT")) {
+//                connector += str.trim() + ", ";
 //
 //            }
-//            if (str.contains("интегрированная графика: ")) {
-//                integr_gpu = str.replace("интегрированная графика: ", "");
+//            if (str.contains("встроенная СНПЧ")) {
+//                CISS = "есть";
+//            }
+//            if (str.contains("двусторонняя печать")) {
+//                two_sided_printing = "есть";
+//            }
 //
-//            }
-//            if (str.contains("HDD: ")) {
-//                hdd_data = str.replace("HDD: ", "").split(",")[0];
-//
-//            }
-//            if (str.contains("SSD: ")) {
-//                ssd_data = str.replace("SSD: ", "");
-//            }
 //        }
 //
 //        Pattern pattern = Pattern.compile("\\d+\\s+Мб");
 //        Matcher matcher = pattern.matcher(text);
 //        matcher.find();
 //        String sd = text.substring(matcher.start(), matcher.end() - 6) + " ГБ";
-        List<Product> l1 = p.DNS_PC(url_dns, PC.class);
-//        List<Product> l2 = p.citilink_PC(url_citilinc,PC.class);
+        List<Product> l1 = p.DNS(url_dns_printer_lazer, Printer.class);
+//        List<Product> l2 = p.citilink_PC(url_citilinc_pc,PC.class);
 
     }
 
     // придумать как передавать нужный клаас для парсинга, можно передавать класс, а потом в трёх if сравнивать
-    public List<Product> DNS_PC(String url, Class clazz) throws IOException, URISyntaxException {
+    public List<Product> DNS(String url, Class clazz) throws IOException, URISyntaxException {
         Document page = getPage(url);
         Element element = page.select("div[class=products-list__content]").first();
         Elements els = element.select("div[class=n-catalog-product__main]");
@@ -218,26 +209,45 @@ public class Parser {
             Element content = page1.selectFirst("div[class=price-item ec-price-item]");
             String price = content.selectFirst("div[class=col-header col-order]").selectFirst("div[class=price_g]").selectFirst("span").text();
 
-            PC product = new PC("pc", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+//            PC product = new PC("pc", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
 // паршу полное описание продукта
-            if (clazz == PC.class)
+            if (clazz == PC.class) {
+                PC product = new PC("pc", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
                 setPC_dns(content, product);
-            if (clazz == Monitor.class)
-                setPC_dns(content, product);
-            if (clazz == Printer.class)
-                setPC_dns(content, product);
+                product.setShort_description("процессор: " + product.getCpu_model() + "; частота процессора: " + product.getCpu_frequency() + "; оперативная память: " + product.getRam_model() +
+                        " " + product.getRam_size() + " " + product.getRam_frequency() + "; видеокарта: " + product.getGpu_discrete_model() + " — " + product.getGpu_discrete_size() +
+                        "; интегрированная: " + product.getGpu_integrated_model() + "; HDD: " + product.getHdd_data() + "; SSD: " + product.getSsd_data());
+                productList.add(product);
+            }
+            if (clazz == Monitor.class) {
+                Monitor product = new Monitor("monitor", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                setMonitor_dns(content, product);
+                product.setShort_description("экран: " + product.getScreen() + ", частота: " + product.getScreen_frequency() + ", матрица " + product.getMatrix_type() +
+                        " с разрешением " + product.getScreen_resolution() + ", отношением сторон " + product.getAspect_ratio() + ", яркостью " + product.getBrightness() +
+                        ", временем отклика " + product.getResponse_time() + ", разъем " + product.getConnector());
+                productList.add(product);
+            }
+            if (clazz == Printer.class) {
+                Printer product = new Printer("printer", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                setPrinter_dns(content, product);
+                product.setShort_description("технология печати: " + product.getType() + ", " + product.getColor() + ", формат: " + product.getFormat() +
+                        ", максимальная скорость печати " + product.getMax_print_speed() + ", " + product.getConnector() + ", встроенная СНПЧ - " + product.getCISS() +
+                        ", двусторонняя печать - " + product.getTwo_sided_printing());
+                productList.add(product);
+            }
 
-            productList.add(product);
 
-            System.out.print(count++);
-            if (product != null) System.out.printf(" true\n");
+//            productList.add(product);
+
+            System.out.print(count);
+            if (productList.size() == count++) System.out.printf(" true\n");
         }
         int ss = 9;
 
         return productList;
     }
 
-    public List<Product> citilink_PC(String url, Class clazz) throws IOException, InterruptedException, URISyntaxException {
+    public List<Product> citilink(String url, Class clazz) throws IOException, InterruptedException, URISyntaxException {
         Document page = getPage(url);
         Element element = page.select("div[class=block_data__gtm-js block_data__pageevents-js listing_block_data__pageevents-js]").first();
         Elements els = element.select("div[class=js--subcategory-product-item subcategory-product-item product_data__gtm-js  product_data__pageevents-js ddl_product]");
@@ -268,52 +278,30 @@ public class Parser {
             Document page1 = getPage(linkOnFullDescription);
             String shortDescription = page1.select("p[class=short_description]").first().text();
 
-            PC product = new PC("pc", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
-            String[] split = shortDescription.split("; ");
-//            for (String str : split) {
-//                if (str.contains("процессор: "))
-//                    product.setCpu_model(str.replace("процессор: ", ""));
-//                if (str.contains("частота процессора: "))
-//                    product.setCpu_frequency(str.replace("частота процессора: ", "").substring(0, 6));
-//                if (str.contains("оперативная память: ")) {
-//                    String text1 = str.replace("оперативная память: ", "");
-//                    Pattern pattern = Pattern.compile("\\d+\\s+Мб");
-//                    Matcher matcher = pattern.matcher(text1);
-//                    if (matcher.find()) {
-//                        product.setRam_model(text1.substring(0, matcher.start()));
-//                        product.setRam_size(text1.substring(matcher.start(), matcher.end() - 6) + " ГБ");
-//                        product.setRam_frequency(text1.substring(matcher.end()));
-//                    } else
-//                        product.setRam_model(text1);
-//                }
-//                if (str.contains("видеокарта: ")) {
-//                    String text1 = str.replace("видеокарта: ", "");
-//                    Pattern pattern = Pattern.compile("\\d+\\s+Мб");
-//                    Matcher matcher = pattern.matcher(text1);
-//                    if (matcher.find()) {
-//                        product.setGpu_discrete_model(text1.substring(0, matcher.start() - 3));
-//                        product.setGpu_discrete_size(text1.substring(matcher.start(), matcher.end() - 6) + " ГБ");
-//                    } else
-//                        product.setGpu_discrete_model(text1);
-//                }
-//                if (str.contains("интегрированная графика: "))
-//                    product.setGpu_integrated_model(str.replace("интегрированная графика: ", ""));
-//                if (str.contains("HDD: "))
-//                    product.setHdd_data(str.replace("HDD: ", "").split(",")[0]);
-//                if (str.contains("SSD: "))
-//                    product.setSsd_data(str.replace("SSD: ", ""));
-//            }
-            if (clazz == PC.class)
+            String[] split;
+            if (clazz == PC.class) {
+                PC product = new PC("pc", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                split = shortDescription.split("; ");
                 setPC_citilink(product, split);
-            if (clazz == Monitor.class)
-                setPC_citilink(product, split);
-            if (clazz == Printer.class)
-                setPC_citilink(product, split);
+                productList.add(product);
+
+            }
+            if (clazz == Monitor.class) {
+                Monitor product = new Monitor("monitor", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                split = shortDescription.split(", ");
+                setMonitor_citilink(product, split);
+                productList.add(product);
+            }
+            if (clazz == Printer.class) {
+                Printer product = new Printer("printer", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                split = shortDescription.split(", ");
+                setPrinter_citilink(product, split);
+                productList.add(product);
+            }
 
 
-            productList.add(product);
-            System.out.print(count++);
-            if (product != null) System.out.printf(" true\n");
+            System.out.print(count);
+            if (productList.size() == count++) System.out.printf(" true\n");
         }
         return productList;
     }
@@ -360,9 +348,7 @@ public class Parser {
         for (int i = 0; i < tableContent.size(); i++) {
             Element tr = tableContent.get(i);
             if (tr.attr("class").equals("extended-characteristic hidden")) continue;
-//                Map<String, String> tableContentTR = new HashMap<>();
             if (tr.selectFirst("td").attr("class").equals("table-part")) {
-//                    String mainTh = tr.selectFirst("td").text();
                 i++;
                 String gpu_model = null;
                 String gpu_chip_type = null;
@@ -380,8 +366,6 @@ public class Parser {
                         product.setRam_model(td);
                     if (th.contains("Размер оперативной памяти"))
                         product.setRam_size(td);
-
-
                     if (th.contains("Производитель видеочипа"))
                         gpu_chip_type = td;
                     if (th.contains("Модель дискретной видеокарты"))
@@ -394,8 +378,6 @@ public class Parser {
                         product.setHdd_data(td.contains("нет") ? null : td);
                     if (th.contains("Объем твердотельного накопителя (SSD)"))
                         product.setSsd_data(td.contains("нет") ? null : td);
-
-//                        tableContentTR.put(th, td);
                     if (i == tableContent.size() - 1) break;
                     if (tableContent.get(i + 1).selectFirst("td").attr("class").equals("table-part")
                             || tableContent.get(i + 1).attr("class").equals("extended-characteristic hidden"))
@@ -403,10 +385,134 @@ public class Parser {
                 }
                 if (product.getGpu_discrete_model() == null)
                     product.setGpu_discrete_model(gpu_chip_type == null || gpu_model == null || gpu_chip_type.equals("нет") || gpu_model.equals("нет") ? null : gpu_chip_type + " " + gpu_model);
-//                    fullProductDescription.put(mainTh, tableContentTR);
             }
         }
         return product;
 
+    }
+
+    public static Monitor setMonitor_citilink(Monitor product, String[] split) {
+        String response_time = "";
+        String connector = "";
+        for (String str : split) {
+            if (str.contains("экран: "))
+                product.setScreen(str.replace("экран: ", "").replace("\"", ""));
+            if (str.contains("частота: "))
+                product.setScreen_frequency(str.replace("частота: ", ""));
+            if (str.contains("матрица ")) {
+                String[] arr = str.replace("матрица ", "").split(" ");
+                product.setScreen_resolution(arr[arr.length - 1]);
+                product.setMatrix_type(arr[0]);
+            }
+            if (str.contains("отношением сторон "))
+                product.setAspect_ratio(str.replace("отношением сторон ", ""));
+            if (str.contains("яркостью "))
+                product.setBrightness(str.replace("яркостью ", ""));
+            if (str.contains("временем отклика "))
+                response_time += str.replace("временем отклика ", "") + ", ";
+            if (str.contains("разъем ") || str.contains("D-SUB") || str.contains("VGA") || str.contains("DVI") || str.contains("HDMI") || str.contains("Display Port"))
+                connector += str.replace("разъем ", "") + ", ";
+        }
+        product.setResponse_time(response_time.substring(0, response_time.length() - 1));
+        product.setConnector(connector.substring(0, connector.length() - 1));
+        return product;
+    }
+
+    public static Monitor setMonitor_dns(Element content, Monitor product) {
+        Elements tableContent = content.selectFirst("div[id=characteristics]").select("tr");
+        for (int i = 0; i < tableContent.size(); i++) {
+            Element tr = tableContent.get(i);
+            if (tr.attr("class").equals("extended-characteristic hidden")) continue;
+            if (tr.selectFirst("td").attr("class").equals("table-part")) {
+                i++;
+                for (int j = i; j < tableContent.size(); i++) {
+                    if (tableContent.get(i).selectFirst("tr").attr("class").equals("extended-characteristic hidden"))
+                        continue;
+                    String th = tableContent.get(i).selectFirst("tr").selectFirst("span").text();
+                    String td = tableContent.get(i).selectFirst("tr").select("td").get(1).text();
+                    if (th.contains("Диагональ экрана"))
+                        product.setScreen(td.replace("\"", ""));
+                    if (th.contains("Максимальная частота обновления экрана"))
+                        product.setScreen_frequency(td);
+                    if (th.contains("Максимальное разрешение"))
+                        product.setScreen_resolution(td);
+                    if (th.contains("Соотношение сторон"))
+                        product.setAspect_ratio(td);
+                    if (th.contains("Яркость"))
+                        product.setBrightness(td);
+                    if (th.contains("Время отклика пикселя"))
+                        product.setResponse_time(td);
+                    if (th.contains("Тип ЖК-матрицы (подробно)"))
+                        product.setMatrix_type(td);
+                    if (th.contains("Видеоразъемы"))
+                        product.setConnector(td);
+
+                    if (i == tableContent.size() - 1) break;
+                    if (tableContent.get(i + 1).selectFirst("td").attr("class").equals("table-part")
+                            || tableContent.get(i + 1).attr("class").equals("extended-characteristic hidden"))
+                        break;
+                }
+            }
+        }
+        return product;
+    }
+
+    public static Printer setPrinter_citilink(Printer product, String[] split) {
+        String connector = "";
+        for (String str : split) {
+            if (str.contains("технология печати: "))
+                product.setType(str.replace("технология печати: ", ""));
+            if (str.contains("цветной") || str.contains("черно-белый"))
+                product.setColor(str.trim());
+            if (str.contains("формат: "))
+                product.setFormat(str.replace("формат: ", ""));
+            if (str.contains("максимальная скорость печати "))
+                product.setMax_print_speed(str.replace("максимальная скорость печати ", ""));
+            if (str.contains("USB") || str.contains("RJ-45") || str.contains("Wi-Fi") || str.contains("LPT"))
+                connector += str.trim() + ", ";
+            if (str.contains("встроенная СНПЧ"))
+                product.setCISS("есть");
+            if (str.contains("двусторонняя печать"))
+                product.setTwo_sided_printing("есть");
+        }
+        product.setConnector(connector.substring(0, connector.length() - 2));
+        return product;
+    }
+
+    public static Printer setPrinter_dns(Element content, Printer product) {
+        Elements tableContent = content.selectFirst("div[id=characteristics]").select("tr");
+        for (int i = 0; i < tableContent.size(); i++) {
+            Element tr = tableContent.get(i);
+            if (tr.attr("class").equals("extended-characteristic hidden")) continue;
+            if (tr.selectFirst("td").attr("class").equals("table-part")) {
+                i++;
+                for (int j = i; j < tableContent.size(); i++) {
+                    if (tableContent.get(i).selectFirst("tr").attr("class").equals("extended-characteristic hidden"))
+                        continue;
+                    String th = tableContent.get(i).selectFirst("tr").selectFirst("span").text();
+                    String td = tableContent.get(i).selectFirst("tr").select("td").get(1).text();
+                    if (th.contains("Технология печати"))
+                        product.setType(td);
+                    if (th.contains("Цветность печати"))
+                        product.setColor(td);
+                    if (th.contains("Максимальный формат"))
+                        product.setFormat(td);
+                    if (th.contains("Скорость чёрно-белой печати (стр/мин)"))
+                        product.setMax_print_speed(td);
+                    if (th.contains("Система непрерывной подачи чернил (СНПЧ)"))
+                        product.setCISS(td);
+                    if (th.contains("Автоматическая двусторонняя печать"))
+                        product.setTwo_sided_printing(td);
+                    if (th.contains("Интерфейсы"))
+                        product.setConnector(td);
+
+                    if (i == tableContent.size() - 1) break;
+                    if (tableContent.get(i + 1).selectFirst("td").attr("class").equals("table-part")
+                            || tableContent.get(i + 1).attr("class").equals("extended-characteristic hidden"))
+                        break;
+                }
+            }
+        }
+        return product;
     }
 }

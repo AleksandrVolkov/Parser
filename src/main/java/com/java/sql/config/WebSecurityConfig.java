@@ -20,7 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/","/citilink","/dns","/parse", "/registration", "/activate/*").permitAll()
+                    .antMatchers("/","/citilink_printer","/dns_printer","/citilink_pc","/dns_monitor","/citilink_monitor","/dns_pc","/parse", "/registration", "/activate/*").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()

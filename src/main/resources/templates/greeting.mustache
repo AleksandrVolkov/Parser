@@ -8,13 +8,35 @@
 <body>
 <div>Hello, User</div>
 <a href="/main">Main</a>
-<form action="/citilink" method="post">
+<p>
+<form action="/citilink_pc" method="post">
     <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-    <div><input type="submit" value="Ситилинк"/></div>
+    <div><input type="submit" value="Ситилинк ПК"/></div>
 </form>
-<form action="/dns" method="post">
+<form action="/dns_pc" method="post">
     <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-    <div><input type="submit" value="DNS"/></div>
+    <div><input type="submit" value="DNS ПК"/></div>
 </form>
+</p>
+<p>
+<form action="/citilink_monitor" method="post">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+    <div><input type="submit" value="Ситилинк Мониторы"/></div>
+</form>
+<form action="/dns_monitor" method="post">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+    <div><input type="submit" value="DNS Мониторы"/></div>
+</form>
+</p>
+<p>
+<form action="/citilink_printer" method="post">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+    <div><input type="submit" value="Ситилинк Принтеры"/></div>
+</form>
+<form action="/dns_printer" method="post">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+    <div><input type="submit" value="DNS Принтеры"/></div>
+</form>
+</p>
 </body>
 </html>

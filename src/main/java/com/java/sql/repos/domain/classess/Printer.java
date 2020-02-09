@@ -20,6 +20,10 @@ public class Printer extends Product {
     public Printer() {
     }
 
+    public Printer(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price) {
+        super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
+    }
+
     public Printer(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price,
                    String type, String color, String format, String max_print_speed, String connector, String CISS, String two_sided_printing) {
         super(product_type, shop, short_image, name, short_description, link_on_full_description, price);

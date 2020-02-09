@@ -13,13 +13,16 @@ public class Monitor extends Product {
     private String screen_frequency;
     private String aspect_ratio;
     private String brightness;
-
     private String response_time;
     private String connector;
     private String matrix_type;
 
 
     public Monitor() {
+    }
+
+    public Monitor(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price) {
+        super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
     }
 
     public Monitor(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price,
