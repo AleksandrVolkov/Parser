@@ -122,18 +122,25 @@ public class Parser {
 //                System.out.println(s.substring(s.length() - 1));
 //
 //        }
+//        String str = " максимальная скорость печати (ЧБ) 18стр/мин";
+//        String str1 = " , максимальная скорость печати (ЧБ) до 14.5 стр/мин,";
+//        String text1 = str.replace("максимальная скорость печати ", "");
+//        Pattern pattern = Pattern.compile("\\d+.?\\d*\\s*стр/мин");
+//        Matcher matcher = pattern.matcher(text1);
+//        if (matcher.find())
+//            text1 = text1.substring(matcher.start(), matcher.end()-7);
 
-        int i = 1;
+        int i = 5;
         Parser p = new Parser();
         String url_citilinc_pc = "https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=" + String.valueOf(i);
-        String url_citilinc_monitor = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors/?available=1&status=55395790&p=" + String.valueOf(i);
+//        String url_citilinc_monitor = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors/?available=1&status=55395790&p=" + String.valueOf(i);
         String url_citilinc_printer_lazer = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors_and_office/printers/?available=1&status=55395790&p=" + String.valueOf(i);
         String url_citilinc_printer_struya = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors_and_office/ink_printers/?available=1&status=55395790&p=" + String.valueOf(i);
-        String url_dns_pc = "https://www.dns-shop.ru/catalog/17a8932c16404e77/sistemnye-bloki/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2";
-        String url_dns_monitor = "https://www.dns-shop.ru/catalog/17a8943716404e77/monitory/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2&q=%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80";
+//        String url_dns_pc = "https://www.dns-shop.ru/catalog/17a8932c16404e77/sistemnye-bloki/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2";
+//        String url_dns_monitor = "https://www.dns-shop.ru/catalog/17a8943716404e77/monitory/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2&q=%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80";
         String url_dns_printer_lazer = "https://www.dns-shop.ru/catalog/17a8e00716404e77/lazernye-printery/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2&q=%D0%BF%D1%80%D0%B8%D0%BD%D1%82%D0%B5%D1%80";
         String url_dns_printer_struya = "https://www.dns-shop.ru/catalog/17a8e07216404e77/strujnye-printery/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2&f[nz8]=9hd9&q=%D0%BF%D1%80%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%8B";
-
+//
 //        String text = "технология печати: струйный, цветной, формат: A4, максимальная скорость печати (ЧБ) до 13 стр/мин, формата А4, USB, RJ-45, Wi-Fi, встроенная СНПЧ, двусторонняя печать";
 //        String[] split = text.split(", ");
 //        String type = "";
@@ -176,8 +183,8 @@ public class Parser {
 //        Matcher matcher = pattern.matcher(text);
 //        matcher.find();
 //        String sd = text.substring(matcher.start(), matcher.end() - 6) + " ГБ";
-        List<Product> l1 = p.DNS(url_dns_printer_lazer, Printer.class);
-//        List<Product> l2 = p.citilink_PC(url_citilinc_pc,PC.class);
+//        List<Product> l1 = p.DNS(url_dns_printer_lazer, Printer.class);
+        List<Product> l2 = p.citilink(url_citilinc_printer_lazer, Printer.class);
 
     }
 
@@ -196,6 +203,7 @@ public class Parser {
                 String shortImg2 = el.select("a[class=show-popover ec-price-item-link]").first().selectFirst("img").attr("data-src");
                 shortImg = shortImg1.equals("") ? shortImg2 : shortImg1;
             } catch (NullPointerException e) {
+                e.printStackTrace();
             }
 
             String name = el.select("div[class=product-info__title-link]").select("a").first().text();
@@ -214,25 +222,28 @@ public class Parser {
             if (clazz == PC.class) {
                 PC product = new PC("pc", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
                 setPC_dns(content, product);
-                product.setShort_description("процессор: " + product.getCpu_model() + "; частота процессора: " + product.getCpu_frequency() + "; оперативная память: " + product.getRam_model() +
+                String short_descr = "процессор: " + product.getCpu_model() + "; частота процессора: " + product.getCpu_frequency() + "; оперативная память: " + product.getRam_model() +
                         " " + product.getRam_size() + " " + product.getRam_frequency() + "; видеокарта: " + product.getGpu_discrete_model() + " — " + product.getGpu_discrete_size() +
-                        "; интегрированная: " + product.getGpu_integrated_model() + "; HDD: " + product.getHdd_data() + "; SSD: " + product.getSsd_data());
+                        "; интегрированная: " + product.getGpu_integrated_model() + "; HDD: " + product.getHdd_data() + "; SSD: " + product.getSsd_data();
+                product.setShort_description(short_descr.replace("null", "нет"));
                 productList.add(product);
             }
             if (clazz == Monitor.class) {
                 Monitor product = new Monitor("monitor", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
                 setMonitor_dns(content, product);
-                product.setShort_description("экран: " + product.getScreen() + ", частота: " + product.getScreen_frequency() + ", матрица " + product.getMatrix_type() +
+                String short_descr = "экран: " + product.getScreen() + ", частота: " + product.getScreen_frequency() + ", матрица " + product.getMatrix_type() +
                         " с разрешением " + product.getScreen_resolution() + ", отношением сторон " + product.getAspect_ratio() + ", яркостью " + product.getBrightness() +
-                        ", временем отклика " + product.getResponse_time() + ", разъем " + product.getConnector());
+                        ", временем отклика " + product.getResponse_time() + ", разъем " + product.getConnector();
+                product.setShort_description(short_descr.replace("null", "нет"));
                 productList.add(product);
             }
             if (clazz == Printer.class) {
                 Printer product = new Printer("printer", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
                 setPrinter_dns(content, product);
-                product.setShort_description("технология печати: " + product.getType() + ", " + product.getColor() + ", формат: " + product.getFormat() +
+                String short_descr = "технология печати: " + product.getType() + ", " + product.getColor() + ", формат: " + product.getFormat() +
                         ", максимальная скорость печати " + product.getMax_print_speed() + ", " + product.getConnector() + ", встроенная СНПЧ - " + product.getCISS() +
-                        ", двусторонняя печать - " + product.getTwo_sided_printing());
+                        ", двусторонняя печать - " + product.getTwo_sided_printing();
+                product.setShort_description(short_descr.replace("null", "нет"));
                 productList.add(product);
             }
 
@@ -283,6 +294,50 @@ public class Parser {
                 PC product = new PC("pc", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
                 split = shortDescription.split("; ");
                 setPC_citilink(product, split);
+
+                Element content = page1.selectFirst("div[class=specification_view product_view]");
+                Element productFeatures = content.selectFirst("table[class=product_features]");
+                Elements elTable = productFeatures.select("tr");
+                boolean flag = false;
+                for (int i = 0; i < elTable.size(); i++) {
+                    Element tr = elTable.get(i);
+                    if (tr.attr("class").equals("header_row")) {
+                        String mainTh = elTable.get(i).selectFirst("th").text();
+
+                        i++;
+                        if (mainTh.contains("Процессор"))
+                            for (int j = i; j < elTable.size(); i++) {
+                                String th = elTable.get(i).selectFirst("th").text();
+                                String td = elTable.get(i).selectFirst("td").text();
+                                if (th.contains("Количество ядер процессора")) {
+                                    switch (td) {
+                                        case ("двухъядерный"):
+                                        case ("2"):
+                                            product.setCpu_cores_count(2);
+                                            break;
+                                        case ("четырехъядерный"):
+                                        case ("4"):
+                                            product.setCpu_cores_count(4);
+                                            break;
+                                        case ("шестиядерный"):
+                                        case ("6"):
+                                            product.setCpu_cores_count(6);
+                                            break;
+                                        case ("восьмиядерный"):
+                                        case ("8"):
+                                            product.setCpu_cores_count(8);
+                                            break;
+                                    }
+                                    flag = true;
+                                    break;
+                                }
+                                if (i == elTable.size() - 1) break;
+                                if (elTable.get(i + 1).attr("class").equals("header_row")) break;
+                            }
+                        if (flag) break;
+                    }
+                }
+
                 productList.add(product);
 
             }
@@ -310,8 +365,10 @@ public class Parser {
         for (String str : split) {
             if (str.contains("процессор: "))
                 product.setCpu_model(str.replace("процессор: ", ""));
-            if (str.contains("частота процессора: "))
-                product.setCpu_frequency(str.replace("частота процессора: ", "").substring(0, 6));
+            if (str.contains("частота процессора: ")) {
+                String str_freq = str.replace("частота процессора: ", "").split(" ")[0];
+                product.setCpu_frequency(Double.valueOf(str_freq));
+            }
             if (str.contains("оперативная память: ")) {
                 String text1 = str.replace("оперативная память: ", "");
                 Pattern pattern = Pattern.compile("\\d+\\s+Мб");
@@ -361,7 +418,9 @@ public class Parser {
                     if (th.contains("Модель процессора"))
                         product.setCpu_model(td);
                     if (th.contains("Частота процессора"))
-                        product.setCpu_frequency(td);
+                        product.setCpu_frequency(Double.valueOf(td.split(" ")[0]) / 1000);
+                    if (th.contains("Количество ядер процессора"))
+                        product.setCpu_cores_count(Integer.valueOf(td));
                     if (th.contains("Тип оперативной памяти"))
                         product.setRam_model(td);
                     if (th.contains("Размер оперативной памяти"))
@@ -396,9 +455,9 @@ public class Parser {
         String connector = "";
         for (String str : split) {
             if (str.contains("экран: "))
-                product.setScreen(str.replace("экран: ", "").replace("\"", ""));
+                product.setScreen(Double.valueOf(str.replace("экран: ", "").replace("\"", "")));
             if (str.contains("частота: "))
-                product.setScreen_frequency(str.replace("частота: ", ""));
+                product.setScreen_frequency(Integer.parseInt(str.replace("частота: ", "").replace("Гц", "").trim()));
             if (str.contains("матрица ")) {
                 String[] arr = str.replace("матрица ", "").split(" ");
                 product.setScreen_resolution(arr[arr.length - 1]);
@@ -431,9 +490,9 @@ public class Parser {
                     String th = tableContent.get(i).selectFirst("tr").selectFirst("span").text();
                     String td = tableContent.get(i).selectFirst("tr").select("td").get(1).text();
                     if (th.contains("Диагональ экрана"))
-                        product.setScreen(td.replace("\"", ""));
+                        product.setScreen(Double.valueOf(td.replace("\"", "")));
                     if (th.contains("Максимальная частота обновления экрана"))
-                        product.setScreen_frequency(td);
+                        product.setScreen_frequency(Integer.parseInt(td.replace("Гц", "").trim()));
                     if (th.contains("Максимальное разрешение"))
                         product.setScreen_resolution(td);
                     if (th.contains("Соотношение сторон"))
@@ -441,7 +500,7 @@ public class Parser {
                     if (th.contains("Яркость"))
                         product.setBrightness(td);
                     if (th.contains("Время отклика пикселя"))
-                        product.setResponse_time(td);
+                        product.setResponse_time(td.substring(0, td.length() - 1));
                     if (th.contains("Тип ЖК-матрицы (подробно)"))
                         product.setMatrix_type(td);
                     if (th.contains("Видеоразъемы"))
@@ -459,23 +518,33 @@ public class Parser {
 
     public static Printer setPrinter_citilink(Printer product, String[] split) {
         String connector = "";
-        for (String str : split) {
-            if (str.contains("технология печати: "))
-                product.setType(str.replace("технология печати: ", ""));
-            if (str.contains("цветной") || str.contains("черно-белый"))
-                product.setColor(str.trim());
-            if (str.contains("формат: "))
-                product.setFormat(str.replace("формат: ", ""));
-            if (str.contains("максимальная скорость печати "))
-                product.setMax_print_speed(str.replace("максимальная скорость печати ", ""));
-            if (str.contains("USB") || str.contains("RJ-45") || str.contains("Wi-Fi") || str.contains("LPT"))
-                connector += str.trim() + ", ";
-            if (str.contains("встроенная СНПЧ"))
-                product.setCISS("есть");
-            if (str.contains("двусторонняя печать"))
-                product.setTwo_sided_printing("есть");
+        if (split.length > 1) {
+            for (String str : split) {
+                if (str.contains("технология печати: "))
+                    product.setType(str.replace("технология печати: ", ""));
+                if (str.contains("цветной") || str.contains("черно-белый"))
+                    product.setColor(str.trim());
+                if (str.contains("формат: "))
+                    product.setFormat(str.replace("формат: ", ""));
+                if (str.contains("максимальная скорость печати ")) {
+                    //максимальная скорость печати (ЧБ) до 37 стр/мин
+                    String text1 = str.replace("максимальная скорость печати ", "");
+                    Pattern pattern = Pattern.compile("\\d+.?\\d*\\s*стр/мин");
+                    Matcher matcher = pattern.matcher(text1);
+                    if (matcher.find()) {
+                        product.setMax_print_speed(Double.valueOf(text1.substring(matcher.start(), matcher.end() - 7).trim()));
+                    } else
+                        product.setMax_print_speed(null);
+                }
+                if (str.contains("USB") || str.contains("RJ-45") || str.contains("Wi-Fi") || str.contains("LPT"))
+                    connector += str.trim() + ", ";
+                if (str.contains("встроенная СНПЧ"))
+                    product.setCISS("есть");
+                if (str.contains("двусторонняя печать"))
+                    product.setTwo_sided_printing("есть");
+            }
+            product.setConnector(connector.substring(0, connector.length() - 2));
         }
-        product.setConnector(connector.substring(0, connector.length() - 2));
         return product;
     }
 
@@ -497,8 +566,16 @@ public class Parser {
                         product.setColor(td);
                     if (th.contains("Максимальный формат"))
                         product.setFormat(td);
-                    if (th.contains("Скорость чёрно-белой печати (стр/мин)"))
-                        product.setMax_print_speed(td);
+                    if (th.contains("Скорость чёрно-белой печати (стр/мин)")) {
+//                        product.setMax_print_speed(Double.valueOf(td));
+                        String text1 = td.replace("максимальная скорость печати ", "");
+                        Pattern pattern = Pattern.compile("\\d+.?\\d*\\s*стр/мин");
+                        Matcher matcher = pattern.matcher(text1);
+                        if (matcher.find()) {
+                            product.setMax_print_speed(Double.valueOf(text1.substring(matcher.start(), matcher.end() - 7).trim()));
+                        } else
+                            product.setMax_print_speed(null);
+                    }
                     if (th.contains("Система непрерывной подачи чернил (СНПЧ)"))
                         product.setCISS(td);
                     if (th.contains("Автоматическая двусторонняя печать"))

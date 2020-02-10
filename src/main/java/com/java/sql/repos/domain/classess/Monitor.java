@@ -8,9 +8,9 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "MONITOR_DATA")
 public class Monitor extends Product {
-    private String screen;
+    private Double screen;
     private String screen_resolution;
-    private String screen_frequency;
+    private Integer screen_frequency;
     private String aspect_ratio;
     private String brightness;
     private String response_time;
@@ -25,20 +25,9 @@ public class Monitor extends Product {
         super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
     }
 
-    public Monitor(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price,
-                   String screen, String screen_resolution, String screen_frequency, String aspect_ratio, String brightness, String response_time, String connector, String matrix_type) {
-        super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
-        this.screen = screen;
-        this.screen_resolution = screen_resolution;
-        this.screen_frequency = screen_frequency;
-        this.aspect_ratio = aspect_ratio;
-        this.brightness = brightness;
-        this.response_time = response_time;
-        this.connector = connector;
-        this.matrix_type = matrix_type;
-    }
-
-//    public Monitor(String screen, String screen_resolution, String screen_frequency, String aspect_ratio, String brightness, String response_time, String connector, String matrix_type) {
+//    public Monitor(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price,
+//                   Double screen, String screen_resolution, Integer screen_frequency, String aspect_ratio, String brightness, String response_time, String connector, String matrix_type) {
+//        super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
 //        this.screen = screen;
 //        this.screen_resolution = screen_resolution;
 //        this.screen_frequency = screen_frequency;
@@ -49,19 +38,19 @@ public class Monitor extends Product {
 //        this.matrix_type = matrix_type;
 //    }
 
-    public String getScreen_frequency() {
+    public Integer getScreen_frequency() {
         return screen_frequency;
     }
 
-    public void setScreen_frequency(String screen_frequency) {
+    public void setScreen_frequency(Integer screen_frequency) {
         this.screen_frequency = screen_frequency;
     }
 
-    public String getScreen() {
+    public Double getScreen() {
         return screen;
     }
 
-    public void setScreen(String screen) {
+    public void setScreen(Double screen) {
         this.screen = screen;
     }
 

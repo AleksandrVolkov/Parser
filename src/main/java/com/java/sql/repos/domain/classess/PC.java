@@ -10,7 +10,8 @@ import java.math.BigDecimal;
 @Table(name = "PC_DATA")
 public class PC extends Product {
     private String cpu_model;
-    private String cpu_frequency;
+    private Double cpu_frequency;
+    private Integer cpu_cores_count;
 
     private String ram_model;
     private String ram_size;
@@ -26,38 +27,26 @@ public class PC extends Product {
     public PC() {
     }
 
-    public PC(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price,
-              String cpu_model, String cpu_frequency, String ram_model, String ram_size, String ram_frequency, String gpu_discrete_model, String gpu_discrete_size,
-              String gpu_integrated_model, String hdd_data, String ssd_data) {
-        super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
-        this.cpu_model = cpu_model;
-        this.cpu_frequency = cpu_frequency;
-        this.ram_model = ram_model;
-        this.ram_size = ram_size;
-        this.ram_frequency = ram_frequency;
-        this.gpu_discrete_model = gpu_discrete_model;
-        this.gpu_discrete_size = gpu_discrete_size;
-        this.gpu_integrated_model = gpu_integrated_model;
-        this.hdd_data = hdd_data;
-        this.ssd_data = ssd_data;
-    }
+//    public PC(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price,
+//              String cpu_model, Integer cpu_frequency, String ram_model, String ram_size, String ram_frequency, String gpu_discrete_model, String gpu_discrete_size,
+//              String gpu_integrated_model, String hdd_data, String ssd_data) {
+//        super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
+//        this.cpu_model = cpu_model;
+//        this.cpu_frequency = cpu_frequency;
+//        this.ram_model = ram_model;
+//        this.ram_size = ram_size;
+//        this.ram_frequency = ram_frequency;
+//        this.gpu_discrete_model = gpu_discrete_model;
+//        this.gpu_discrete_size = gpu_discrete_size;
+//        this.gpu_integrated_model = gpu_integrated_model;
+//        this.hdd_data = hdd_data;
+//        this.ssd_data = ssd_data;
+//    }
 
     public PC(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price) {
         super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
     }
 
-    public PC(String cpu_model, String cpu_frequency, String ram_model, String ram_size, String ram_frequency, String gpu_discrete_model, String gpu_discrete_size, String gpu_integrated_model, String hdd_data, String ssd_data) {
-        this.cpu_model = cpu_model;
-        this.cpu_frequency = cpu_frequency;
-        this.ram_model = ram_model;
-        this.ram_size = ram_size;
-        this.ram_frequency = ram_frequency;
-        this.gpu_discrete_model = gpu_discrete_model;
-        this.gpu_discrete_size = gpu_discrete_size;
-        this.gpu_integrated_model = gpu_integrated_model;
-        this.hdd_data = hdd_data;
-        this.ssd_data = ssd_data;
-    }
 
     public String getCpu_model() {
         return cpu_model;
@@ -67,12 +56,20 @@ public class PC extends Product {
         this.cpu_model = cpu_model;
     }
 
-    public String getCpu_frequency() {
+    public Double getCpu_frequency() {
         return cpu_frequency;
     }
 
-    public void setCpu_frequency(String cpu_frequency) {
+    public void setCpu_frequency(Double cpu_frequency) {
         this.cpu_frequency = cpu_frequency;
+    }
+
+    public Integer getCpu_cores_count() {
+        return cpu_cores_count;
+    }
+
+    public void setCpu_cores_count(Integer cpu_cores_count) {
+        this.cpu_cores_count = cpu_cores_count;
     }
 
     public String getRam_model() {

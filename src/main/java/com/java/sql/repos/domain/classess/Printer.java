@@ -12,7 +12,7 @@ public class Printer extends Product {
     private String type;
     private String color;
     private String format;
-    private String max_print_speed;
+    private Double max_print_speed;
     private String connector;
     private String CISS;
     private String two_sided_printing;
@@ -24,19 +24,9 @@ public class Printer extends Product {
         super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
     }
 
-    public Printer(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price,
-                   String type, String color, String format, String max_print_speed, String connector, String CISS, String two_sided_printing) {
-        super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
-        this.type = type;
-        this.color = color;
-        this.format = format;
-        this.max_print_speed = max_print_speed;
-        this.connector = connector;
-        this.CISS = CISS;
-        this.two_sided_printing = two_sided_printing;
-    }
-
-//    public Printer(String type, String color, String format, String max_print_speed, String connector, String CISS, String two_sided_printing) {
+//    public Printer(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price,
+//                   String type, String color, String format, Integer max_print_speed, String connector, String CISS, String two_sided_printing) {
+//        super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
 //        this.type = type;
 //        this.color = color;
 //        this.format = format;
@@ -70,11 +60,11 @@ public class Printer extends Product {
         this.format = format;
     }
 
-    public String getMax_print_speed() {
+    public Double getMax_print_speed() {
         return max_print_speed;
     }
 
-    public void setMax_print_speed(String max_print_speed) {
+    public void setMax_print_speed(Double max_print_speed) {
         this.max_print_speed = max_print_speed;
     }
 
