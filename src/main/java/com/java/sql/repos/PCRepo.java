@@ -1,5 +1,7 @@
 package com.java.sql.repos;
 
+import com.java.sql.repos.domain.classess.PC;
+import com.java.sql.repos.domain.classess.Printer;
 import com.java.sql.repos.domain.product.Product;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -7,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 
 public interface PCRepo extends CommonRepository<Product> {
+//    PC findById_product(Long id_product);
 
     @Override
     @Query("SELECT p FROM PC p where p.price >= :min")

@@ -7,9 +7,10 @@ import java.math.BigDecimal;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "Product1")
 public abstract class Product {
+    //    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+//    private Long ID;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long ID;
+    private Long product_id;
     private String product_type;
     private String shop;
     private String short_image;
@@ -21,7 +22,8 @@ public abstract class Product {
     public Product() {
     }
 
-    public Product(String product_type, String shop, String short_image, String name, String short_description,String link_on_full_description, BigDecimal price) {
+    public Product(Long product_id, String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price) {
+        this.product_id = product_id;
         this.product_type = product_type;
         this.shop = shop;
         this.short_image = short_image;
@@ -29,6 +31,14 @@ public abstract class Product {
         this.short_description = short_description;
         this.link_on_full_description = link_on_full_description;
         this.price = price;
+    }
+
+    public Long getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(Long id_product) {
+        this.product_id = id_product;
     }
 
     public String getShop() {
@@ -39,13 +49,13 @@ public abstract class Product {
         this.shop = shop;
     }
 
-    public Long getID() {
-        return ID;
-    }
+//    public Long getID() {
+//        return ID;
+//    }
 
-    public void setID(Long ID) {
-        this.ID = ID;
-    }
+//    public void setID(Long ID) {
+//        this.ID = ID;
+//    }
 
     public String getProduct_type() {
         return product_type;

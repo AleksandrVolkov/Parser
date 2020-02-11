@@ -43,10 +43,10 @@ public class PC extends Product {
 //        this.ssd_data = ssd_data;
 //    }
 
-    public PC(String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price) {
-        super(product_type, shop, short_image, name, short_description, link_on_full_description, price);
-    }
 
+    public PC(Long id_product, String product_type, String shop, String short_image, String name, String short_description, String link_on_full_description, BigDecimal price) {
+        super(id_product, product_type, shop, short_image, name, short_description, link_on_full_description, price);
+    }
 
     public String getCpu_model() {
         return cpu_model;

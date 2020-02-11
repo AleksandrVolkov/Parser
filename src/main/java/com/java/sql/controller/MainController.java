@@ -7,6 +7,7 @@ import com.java.sql.repos.domain.classess.Monitor;
 import com.java.sql.repos.domain.classess.PC;
 import com.java.sql.repos.domain.classess.Printer;
 //import com.java.sql.repos.domain.product.Product;
+import com.java.sql.repos.domain.product.Product;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -53,11 +54,13 @@ public class MainController {
         Parser p = new Parser();
         Document page = p.getPage(url1);
         int lastPage = Integer.parseInt(page.selectFirst("div[class=page_listing]").selectFirst("li[class=last]").selectFirst("a").attr("data-page"));
+        System.out.println("ПК ситилинка, последняя страница - " + lastPage + "\n\n");
 //        int count = 0;
         for (int i = 1; i < lastPage + 1; i++) {
             String url = "https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=" + String.valueOf(i);
 //            url="https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=10";
-//            for (Product product : p.citilink_PC(url,PC.class)) {
+//            for (Product product : p.citilink(url, PC.class)) {
+//                pcRepo.findById_product(product.getId_product());
             pcRepo.saveAll(p.citilink(url, PC.class));
 //            }
             System.out.println(i);
@@ -73,12 +76,13 @@ public class MainController {
         Parser p = new Parser();
         Document page = p.getPage(url1);
         int lastPage = Integer.parseInt(page.selectFirst("div[class=page_listing]").selectFirst("li[class=last]").selectFirst("a").attr("data-page"));
-        for (int i = 7; i < lastPage + 1; i++) {//7
+        System.out.println("Мониторы ситилинка, последняя страница - " + lastPage + "\n\n");
+        for (int i = 1; i < lastPage + 1; i++) {//7
             String url = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors/?available=1&status=55395790&p=" + String.valueOf(i);
 //            List<Product> pl = p.citilink(url, Monitor.class);
 //            for (Product prod : pl) {
-                monitorRepo.saveAll(p.citilink(url, Monitor.class));
-                System.out.println(1);
+            monitorRepo.saveAll(p.citilink(url, Monitor.class));
+//            System.out.println(1);
 //            }
 
             System.out.println(i);
@@ -100,7 +104,7 @@ public class MainController {
         }
         lisNumPages.sort(Integer::compareTo);
         int lastPage = lisNumPages.get(lisNumPages.size() - 1);
-        for (int i = 5; i < lastPage + 1; i++) {
+        for (int i = 1; i < lastPage + 1; i++) {
             String url = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors_and_office/printers/?available=1&status=55395790&p=" + String.valueOf(i);
             printerRepo.saveAll(p.citilink(url, Printer.class));
             System.out.println(i);
@@ -112,7 +116,7 @@ public class MainController {
         Elements elem1 = page1.selectFirst("div[class=page_listing]").select("li[class=next]");//.selectFirst("a").attr("data-page"));
         List<Integer> lisNumPages1 = new ArrayList<>();
         for (Element e : elem1) {
-            lisNumPages.add(Integer.valueOf(e.selectFirst("a").attr("data-page")));
+            lisNumPages1.add(Integer.valueOf(e.selectFirst("a").attr("data-page")));
         }
         lisNumPages1.sort(Integer::compareTo);
         lastPage = lisNumPages1.get(lisNumPages1.size() - 1);
@@ -129,7 +133,7 @@ public class MainController {
     public String greetingParseDNS_PC(Map<String, Object> model) throws IOException, URISyntaxException {
         int lastPage = 0;
         String url1 = "https://www.dns-shop.ru/catalog/17a8932c16404e77/sistemnye-bloki/?p=15&order=1&groupBy=none&stock=2";
-                    //https://www.dns-shop.ru/catalog/17a8932c16404e77/sistemnye-bloki/?p=15&order=1&groupBy=none&stock=2
+        //https://www.dns-shop.ru/catalog/17a8932c16404e77/sistemnye-bloki/?p=15&order=1&groupBy=none&stock=2
         Parser p = new Parser();
         Document page = p.getPage(url1);
         Elements elements = page.select("div[id=products-list-pagination]").first().select("li[class=pagination-widget__page]");
@@ -138,7 +142,7 @@ public class MainController {
             if (el.selectFirst("a").attr("class").contains("pagination-widget__page-link pagination-widget__page-link_last "))
                 lastPage = Integer.parseInt(el.attr("data-page-number"));
 
-        for (int i = 1; i < lastPage+1; i++) {
+        for (int i = 1; i < lastPage + 1; i++) {
             String url = "https://www.dns-shop.ru/catalog/17a8932c16404e77/sistemnye-bloki/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2";
 //            for (Product product : p.DNS_PC(url,PC.class)) {
 //                pcRepo.save(product);
@@ -163,7 +167,7 @@ public class MainController {
         for (Element el : elements)
             if (el.selectFirst("a").attr("class").contains("pagination-widget__page-link pagination-widget__page-link_last"))
                 lastPage = Integer.parseInt(el.attr("data-page-number"));
-        for (int i = 1; i < lastPage+1; i++) {
+        for (int i = 1; i < lastPage + 1; i++) {
             String url = "https://www.dns-shop.ru/catalog/17a8943716404e77/monitory/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2&q=%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80";
             monitorRepo.saveAll(p.DNS(url, Monitor.class));
             System.out.println(i);
@@ -177,14 +181,15 @@ public class MainController {
     @PostMapping("/dns_printer")
     public String greetingParseDNS_Printer(Map<String, Object> model) throws IOException, URISyntaxException {
         int lastPage = 0;
-        String url1 = "https://www.dns-shop.ru/catalog/17a8e00716404e77/lazernye-printery/?p=1&order=1&groupBy=none&stock=2&q=%D0%BF%D1%80%D0%B8%D0%BD%D1%82%D0%B5%D1%80";
         Parser p = new Parser();
+
+        String url1 = "https://www.dns-shop.ru/catalog/17a8e00716404e77/lazernye-printery/?p=1&order=1&groupBy=none&stock=2&q=%D0%BF%D1%80%D0%B8%D0%BD%D1%82%D0%B5%D1%80";
         Document page = p.getPage(url1);
         Elements elements = page.select("div[id=products-list-pagination]").first().select("li[class=pagination-widget__page]");
         for (Element el : elements)
             if (el.selectFirst("a").attr("class").contains("pagination-widget__page-link pagination-widget__page-link_last"))
                 lastPage = Integer.parseInt(el.attr("data-page-number"));
-        for (int i = 1; i < lastPage+1; i++) {
+        for (int i = 1; i < lastPage + 1; i++) {
             String url = "https://www.dns-shop.ru/catalog/17a8e00716404e77/lazernye-printery/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2&q=%D0%BF%D1%80%D0%B8%D0%BD%D1%82%D0%B5%D1%80";
             printerRepo.saveAll(p.DNS(url, Printer.class));
             System.out.println(i);
@@ -194,11 +199,17 @@ public class MainController {
         lastPage = 0;
         String url2 = "https://www.dns-shop.ru/catalog/17a8e07216404e77/strujnye-printery/?p=1&order=1&groupBy=none&stock=2&f[nz8]=9hd9&q=%D0%BF%D1%80%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%8B";
         Document page1 = p.getPage(url2);
-        Elements elements1 = page1.select("div[id=products-list-pagination]").first().select("li[class=pagination-widget__page]");
-        for (Element el : elements1)
-            if (el.selectFirst("a").attr("class").contains("pagination-widget__page-link pagination-widget__page-link_last"))
-                lastPage = Integer.parseInt(el.attr("data-page-number"));
-        for (int i = 1; i < lastPage+1; i++) {
+        try {
+            Elements elements1 = page1.select("div[id=products-list-pagination]").first().select("li[class=pagination-widget__page]");
+            for (Element el : elements1)
+                if (el.selectFirst("a").attr("class").contains("pagination-widget__page-link pagination-widget__page-link_last"))
+                    lastPage = Integer.parseInt(el.attr("data-page-number"));
+        } catch (Exception e) {
+            lastPage = 1;
+            e.printStackTrace();
+        }
+
+        for (int i = 1; i < lastPage + 1; i++) {
             String url = "https://www.dns-shop.ru/catalog/17a8e07216404e77/strujnye-printery/?p=" + String.valueOf(i) + "&order=1&groupBy=none&stock=2&f[nz8]=9hd9&q=%D0%BF%D1%80%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%8B";
             printerRepo.saveAll(p.DNS(url, Printer.class));
             System.out.println(i);

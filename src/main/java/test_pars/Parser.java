@@ -9,16 +9,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,32 +36,44 @@ public class Parser {
                     .referrer("http://www.google.com")
                     .get();
         } catch (Exception e) {
-            System.out.println("Перейдите по ссылке и пройдите капчу -> " + url);
-            Process process = null;
-            RemoteWebDriver driver = null;
-            try {
-                process = new ProcessBuilder("C:\\Users\\sashu\\Desktop\\webSQL-master\\src\\main\\resources\\chromedriver.exe").start();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+//            System.out.println("Перейдите по ссылке и пройдите капчу -> " + url);
+//            Process process = null;
+//            RemoteWebDriver driver = null;
+//            try {
+//                process = new ProcessBuilder("C:\\Users\\sashu\\Desktop\\webSQL-master\\src\\main\\resources\\chromedriver.exe").start();
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//            }
+//            System.setProperty("webdriver.chrome.driver", "C:\\Users\\sashu\\Desktop\\webSQL-master\\src\\main\\resources\\chromedriver.exe");
+//            ChromeOptions options = new ChromeOptions();
+//            try {
+//                driver = new RemoteWebDriver(new URL("http://127.0.0.1:9515"), options);
+//            } catch (MalformedURLException es) {
+//                es.printStackTrace();
+//            }
+
             System.setProperty("webdriver.chrome.driver", "C:\\Users\\sashu\\Desktop\\webSQL-master\\src\\main\\resources\\chromedriver.exe");
-            ChromeOptions options = new ChromeOptions();
+//            ChromeOptions options = new ChromeOptions();
+//            RemoteWebDriver driver =  driver = new RemoteWebDriver(new URL("http://127.0.0.1:9515"), options);
+            ChromeDriver driver = new ChromeDriver();
+//            driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+//            driver.
+//            options.
+            driver.get(url);
             try {
-                driver = new RemoteWebDriver(new URL("http://127.0.0.1:9515"), options);
-            } catch (MalformedURLException es) {
-                es.printStackTrace();
+                WebElement textBox = driver.findElementById("captcha_limit");
+                textBox.sendKeys("В");
+                WebElement button = driver.findElementByClassName("request-limit-page__submit");
+                button.click();
+                driver.close();
+            } catch (Exception e1) {
+                driver.close();
+                e.printStackTrace();
             }
 
-//            System.setProperty("webdriver.chrome.driver", "C:\\Users\\sashu\\Desktop\\webSQL-master\\src\\main\\resources\\chromedriver.exe");
-//            ChromeDriver driver = new ChromeDriver();
-            driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-            driver.get(url);
-            WebElement textBox = driver.findElementById("captcha_limit");
-            textBox.sendKeys("В");
-            WebElement button = driver.findElementByClassName("request-limit-page__submit");
-            button.click();
-            driver.close();
-            process.destroy();
+
+//            assert process != null;
+//            process.destroy();
 
 //            return null;
             return getPage(url);
@@ -129,6 +138,9 @@ public class Parser {
 //        Matcher matcher = pattern.matcher(text1);
 //        if (matcher.find())
 //            text1 = text1.substring(matcher.start(), matcher.end()-7);
+        String sda = "m00176950";
+        boolean sdwe = sda.matches("^\\d+$");
+        ;
 
         int i = 5;
         Parser p = new Parser();
@@ -183,8 +195,8 @@ public class Parser {
 //        Matcher matcher = pattern.matcher(text);
 //        matcher.find();
 //        String sd = text.substring(matcher.start(), matcher.end() - 6) + " ГБ";
-//        List<Product> l1 = p.DNS(url_dns_printer_lazer, Printer.class);
-        List<Product> l2 = p.citilink(url_citilinc_printer_lazer, Printer.class);
+        List<Product> l1 = p.DNS(url_dns_printer_lazer, Printer.class);
+//        List<Product> l2 = p.citilink(url_citilinc_printer_lazer, Printer.class);
 
     }
 
@@ -220,30 +232,37 @@ public class Parser {
 //            PC product = new PC("pc", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
 // паршу полное описание продукта
             if (clazz == PC.class) {
-                PC product = new PC("pc", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                PC product = new PC(0L, "pc", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
                 setPC_dns(content, product);
                 String short_descr = "процессор: " + product.getCpu_model() + "; частота процессора: " + product.getCpu_frequency() + "; оперативная память: " + product.getRam_model() +
                         " " + product.getRam_size() + " " + product.getRam_frequency() + "; видеокарта: " + product.getGpu_discrete_model() + " — " + product.getGpu_discrete_size() +
                         "; интегрированная: " + product.getGpu_integrated_model() + "; HDD: " + product.getHdd_data() + "; SSD: " + product.getSsd_data();
                 product.setShort_description(short_descr.replace("null", "нет"));
+                product.setProduct_id(Long.parseLong(page1.selectFirst("div[class=price-item-code]").selectFirst("span").text().trim() + "1234"));
+
                 productList.add(product);
             }
             if (clazz == Monitor.class) {
-                Monitor product = new Monitor("monitor", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                Monitor product = new Monitor(0L, "monitor", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
                 setMonitor_dns(content, product);
                 String short_descr = "экран: " + product.getScreen() + ", частота: " + product.getScreen_frequency() + ", матрица " + product.getMatrix_type() +
                         " с разрешением " + product.getScreen_resolution() + ", отношением сторон " + product.getAspect_ratio() + ", яркостью " + product.getBrightness() +
                         ", временем отклика " + product.getResponse_time() + ", разъем " + product.getConnector();
                 product.setShort_description(short_descr.replace("null", "нет"));
+                product.setProduct_id(Long.parseLong(page1.selectFirst("div[class=price-item-code]").selectFirst("span").text().trim() + "1234"));
+
                 productList.add(product);
             }
             if (clazz == Printer.class) {
-                Printer product = new Printer("printer", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                Printer product = new Printer(0L, "printer", "dns", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
                 setPrinter_dns(content, product);
                 String short_descr = "технология печати: " + product.getType() + ", " + product.getColor() + ", формат: " + product.getFormat() +
                         ", максимальная скорость печати " + product.getMax_print_speed() + ", " + product.getConnector() + ", встроенная СНПЧ - " + product.getCISS() +
                         ", двусторонняя печать - " + product.getTwo_sided_printing();
                 product.setShort_description(short_descr.replace("null", "нет"));
+                product.setProduct_id(Long.parseLong(page1.selectFirst("div[class=price-item-code]").selectFirst("span").text().trim() + "1234"));
+
+
                 productList.add(product);
             }
 
@@ -288,14 +307,14 @@ public class Parser {
             }
             Document page1 = getPage(linkOnFullDescription);
             String shortDescription = page1.select("p[class=short_description]").first().text();
+            Element content = page1.selectFirst("div[class=specification_view product_view]");
 
             String[] split;
             if (clazz == PC.class) {
-                PC product = new PC("pc", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                PC product = new PC(0L, "pc", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
                 split = shortDescription.split("; ");
                 setPC_citilink(product, split);
 
-                Element content = page1.selectFirst("div[class=specification_view product_view]");
                 Element productFeatures = content.selectFirst("table[class=product_features]");
                 Elements elTable = productFeatures.select("tr");
                 boolean flag = false;
@@ -338,20 +357,33 @@ public class Parser {
                     }
                 }
 
-                productList.add(product);
+                String ss = page1.selectFirst("span[class=product_id]").text().trim() + "4321";
+                if (ss.matches("^\\d+$")) {
+                    product.setProduct_id(Long.parseLong(ss));
+                    productList.add(product);
+                }
 
             }
             if (clazz == Monitor.class) {
-                Monitor product = new Monitor("monitor", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                Monitor product = new Monitor(0L, "monitor", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
                 split = shortDescription.split(", ");
                 setMonitor_citilink(product, split);
-                productList.add(product);
+                String ss = page1.selectFirst("span[class=product_id]").text().trim() + "4321";
+//                boolean sss = !ss.matches("\\D+\\d+");
+                if (ss.matches("^\\d+$")) {
+                    product.setProduct_id(Long.parseLong(ss));
+                    productList.add(product);
+                }
             }
             if (clazz == Printer.class) {
-                Printer product = new Printer("printer", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                Printer product = new Printer(0L, "printer", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
                 split = shortDescription.split(", ");
                 setPrinter_citilink(product, split);
-                productList.add(product);
+                String ss = page1.selectFirst("span[class=product_id]").text().trim() + "4321";
+                if (ss.matches("^\\d+$")) {
+                    product.setProduct_id(Long.parseLong(ss));
+                    productList.add(product);
+                }
             }
 
 
@@ -451,29 +483,31 @@ public class Parser {
     }
 
     public static Monitor setMonitor_citilink(Monitor product, String[] split) {
-        String response_time = "";
-        String connector = "";
-        for (String str : split) {
-            if (str.contains("экран: "))
-                product.setScreen(Double.valueOf(str.replace("экран: ", "").replace("\"", "")));
-            if (str.contains("частота: "))
-                product.setScreen_frequency(Integer.parseInt(str.replace("частота: ", "").replace("Гц", "").trim()));
-            if (str.contains("матрица ")) {
-                String[] arr = str.replace("матрица ", "").split(" ");
-                product.setScreen_resolution(arr[arr.length - 1]);
-                product.setMatrix_type(arr[0]);
+        String response_time = " ";
+        String connector = " ";
+        if (split.length > 1) {
+            for (String str : split) {
+                if (str.contains("экран: "))
+                    product.setScreen(Double.valueOf(str.replace("экран: ", "").replace("\"", "")));
+                if (str.contains("частота: "))
+                    product.setScreen_frequency(Integer.parseInt(str.replace("частота: ", "").replace("Гц", "").trim()));
+                if (str.contains("матрица ")) {
+                    String[] arr = str.replace("матрица ", "").split(" ");
+                    product.setScreen_resolution(arr[arr.length - 1]);
+                    product.setMatrix_type(arr[0]);
+                }
+                if (str.contains("отношением сторон "))
+                    product.setAspect_ratio(str.replace("отношением сторон ", ""));
+                if (str.contains("яркостью "))
+                    product.setBrightness(str.replace("яркостью ", ""));
+                if (str.contains("временем отклика "))
+                    response_time += str.replace("временем отклика ", "") + ", ";
+                if (str.contains("разъем ") || str.contains("D-SUB") || str.contains("VGA") || str.contains("DVI") || str.contains("HDMI") || str.contains("Display Port"))
+                    connector += str.replace("разъем ", "") + ", ";
             }
-            if (str.contains("отношением сторон "))
-                product.setAspect_ratio(str.replace("отношением сторон ", ""));
-            if (str.contains("яркостью "))
-                product.setBrightness(str.replace("яркостью ", ""));
-            if (str.contains("временем отклика "))
-                response_time += str.replace("временем отклика ", "") + ", ";
-            if (str.contains("разъем ") || str.contains("D-SUB") || str.contains("VGA") || str.contains("DVI") || str.contains("HDMI") || str.contains("Display Port"))
-                connector += str.replace("разъем ", "") + ", ";
+            product.setResponse_time(response_time.substring(0, response_time.length() - 1).equals("") ? null : response_time.substring(0, response_time.length() - 1));
+            product.setConnector(connector.substring(0, connector.length() - 1).equals("") ? null : connector.substring(0, connector.length() - 1));
         }
-        product.setResponse_time(response_time.substring(0, response_time.length() - 1));
-        product.setConnector(connector.substring(0, connector.length() - 1));
         return product;
     }
 
