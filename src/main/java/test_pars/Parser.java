@@ -407,7 +407,11 @@ public class Parser {
                 Matcher matcher = pattern.matcher(text1);
                 if (matcher.find()) {
                     product.setRam_model(text1.substring(0, matcher.start()));
-                    product.setRam_size(text1.substring(matcher.start(), matcher.end() - 6) + " ГБ");
+                    String ramSize = text1.substring(matcher.start(), matcher.end() - 6) + " ГБ";
+                    if (ramSize.equals(" ГБ")) {
+                        product.setRam_size("0." + text1.substring(matcher.start(), matcher.end() - 3) + " ГБ");
+                    } else
+                        product.setRam_size(ramSize);
                     product.setRam_frequency(text1.substring(matcher.end()));
                 } else
                     product.setRam_model(text1);
