@@ -406,7 +406,7 @@ public class Parser {
                 Pattern pattern = Pattern.compile("\\d+\\s+Мб");
                 Matcher matcher = pattern.matcher(text1);
                 if (matcher.find()) {
-                    product.setRam_model(text1.substring(0, matcher.start()));
+                    product.setRam_model(text1.substring(0, matcher.start()).trim());
                     String ramSize = text1.substring(matcher.start(), matcher.end() - 6) + " ГБ";
                     if (ramSize.equals(" ГБ")) {
                         product.setRam_size("0." + text1.substring(matcher.start(), matcher.end() - 3) + " ГБ");
@@ -458,7 +458,7 @@ public class Parser {
                     if (th.contains("Количество ядер процессора"))
                         product.setCpu_cores_count(Integer.valueOf(td));
                     if (th.contains("Тип оперативной памяти"))
-                        product.setRam_model(td);
+                        product.setRam_model(td.trim());
                     if (th.contains("Размер оперативной памяти"))
                         product.setRam_size(td);
                     if (th.contains("Производитель видеочипа"))
@@ -598,10 +598,22 @@ public class Parser {
                         continue;
                     String th = tableContent.get(i).selectFirst("tr").selectFirst("span").text();
                     String td = tableContent.get(i).selectFirst("tr").select("td").get(1).text();
-                    if (th.contains("Технология печати"))
-                        product.setType(td);
-                    if (th.contains("Цветность печати"))
-                        product.setColor(td);
+                    if (th.contains("Технология печати")) {
+                        if (th.contains("лазерная"))
+                            product.setType("лазерный");
+                        if (th.contains("светодиодная"))
+                            product.setType("светодиодный");
+                        if (th.contains("струйная"))
+                            product.setType("струйный");
+                        if (th.contains("матричная"))
+                            product.setType("матричный");
+                    }
+                    if (th.contains("Цветность печати")) {
+                        if (th.contains("черно-белая"))
+                            product.setColor("черно-белый");
+                        if (th.contains("цветная"))
+                            product.setColor("цветной");
+                    }
                     if (th.contains("Максимальный формат"))
                         product.setFormat(td);
                     if (th.contains("Скорость чёрно-белой печати (стр/мин)")) {
