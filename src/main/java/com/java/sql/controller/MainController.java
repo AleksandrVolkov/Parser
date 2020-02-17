@@ -48,30 +48,8 @@ public class MainController {
         return "greeting";
     }
 
-    @PostMapping("/citilink_pc")
-    public String greetingParseCitilink_PC(Map<String, Object> model) throws IOException, InterruptedException, URISyntaxException {
-        String url1 = "https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=1";
-        Parser p = new Parser();
-        Document page = p.getPage(url1);
-        int lastPage = Integer.parseInt(page.selectFirst("div[class=page_listing]").selectFirst("li[class=last]").selectFirst("a").attr("data-page"));
-        System.out.println("ПК ситилинка, последняя страница - " + lastPage + "\n\n");
-//        int count = 0;
-        for (int i = 1; i < lastPage + 1; i++) {
-            String url = "https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=" + String.valueOf(i);
-//            url="https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=10";
-//            for (Product product : p.citilink(url, PC.class)) {
-//                pcRepo.findById_product(product.getId_product());
-            pcRepo.saveAll(p.citilink(url, PC.class));
-//            }
-            System.out.println(i);
-        }
-        System.out.println("final");
-//        return "greeting";
-        return "redirect:/";
-    }
-
-    @PostMapping("/citilink_monitor")
-    public String greetingParseCitilink_Monitor(Map<String, Object> model) throws IOException, InterruptedException, URISyntaxException {
+    public void citilink_monitor() throws IOException, URISyntaxException, InterruptedException {
+        System.out.println("Начинаем мониторы компы в ситилинке");
         String url1 = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors/?available=1&status=55395790&p=1";
         Parser p = new Parser();
         Document page = p.getPage(url1);
@@ -79,16 +57,106 @@ public class MainController {
         System.out.println("Мониторы ситилинка, последняя страница - " + lastPage + "\n\n");
         for (int i = 1; i < lastPage + 1; i++) {//7
             String url = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors/?available=1&status=55395790&p=" + String.valueOf(i);
-//            List<Product> pl = p.citilink(url, Monitor.class);
-//            for (Product prod : pl) {
             monitorRepo.saveAll(p.citilink(url, Monitor.class));
-//            System.out.println(1);
-//            }
-
-            System.out.println(i);
-
+            System.out.println("закончили парсить страницу " + i);
         }
         System.out.println("final");
+    }
+
+    public void citilink_pc() throws IOException, URISyntaxException, InterruptedException {
+        System.out.println("Начинаем парсить компы в ситилинке");
+        String url1 = "https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=1";
+        Parser p = new Parser();
+        Document page = p.getPage(url1);
+        int lastPage = Integer.parseInt(page.selectFirst("div[class=page_listing]").selectFirst("li[class=last]").selectFirst("a").attr("data-page"));
+        System.out.println("ПК ситилинка, последняя страница - " + lastPage + "\n\n");
+        for (int i = 1; i < lastPage + 1; i++) {
+            String url = "https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=" + String.valueOf(i);
+            pcRepo.saveAll(p.citilink(url, PC.class));
+            System.out.println("закончили парсить страницу " + i);
+        }
+        System.out.println("final");
+    }
+    public void citilink_printer() throws IOException, URISyntaxException, InterruptedException {
+        System.out.println("Начинаем парсить принтеры в ситилинке");
+        String url1 = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors_and_office/printers/?available=1&status=55395790&p=1";
+        Parser p = new Parser();
+        Document page = p.getPage(url1);
+        Elements elem = page.selectFirst("div[class=page_listing]").select("li[class=next]");//.selectFirst("a").attr("data-page"));
+        List<Integer> lisNumPages = new ArrayList<>();
+        for (Element e : elem) {
+            lisNumPages.add(Integer.valueOf(e.selectFirst("a").attr("data-page")));
+        }
+        lisNumPages.sort(Integer::compareTo);
+        int lastPage = lisNumPages.get(lisNumPages.size() - 1);
+        System.out.println("Принтеры ситилинка, последняя страница - " + lastPage + "\n\n");
+        for (int i = 1; i < lastPage + 1; i++) {
+            String url = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors_and_office/printers/?available=1&status=55395790&p=" + String.valueOf(i);
+            printerRepo.saveAll(p.citilink(url, Printer.class));
+            System.out.println(i);
+        }
+        System.out.println("final");
+
+        String url2 = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors_and_office/ink_printers/?available=1&status=55395790&p=1";
+        Document page1 = p.getPage(url2);
+        Elements elem1 = page1.selectFirst("div[class=page_listing]").select("li[class=next]");//.selectFirst("a").attr("data-page"));
+        List<Integer> lisNumPages1 = new ArrayList<>();
+        for (Element e : elem1) {
+            lisNumPages1.add(Integer.valueOf(e.selectFirst("a").attr("data-page")));
+        }
+        lisNumPages1.sort(Integer::compareTo);
+        lastPage = lisNumPages1.get(lisNumPages1.size() - 1);
+        for (int i = 1; i < lastPage + 1; i++) {
+            String url = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors_and_office/ink_printers/?available=1&status=55395790&p=" + String.valueOf(i);
+            printerRepo.saveAll(p.citilink(url, Printer.class));
+            System.out.println(i);
+        }
+        System.out.println("final");
+    }
+
+    @PostMapping("/citilink_pc")
+    public String greetingParseCitilink_PC(Map<String, Object> model) throws IOException, InterruptedException, URISyntaxException {
+//        String url1 = "https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=1";
+//        Parser p = new Parser();
+//        Document page = p.getPage(url1);
+//        int lastPage = Integer.parseInt(page.selectFirst("div[class=page_listing]").selectFirst("li[class=last]").selectFirst("a").attr("data-page"));
+//        System.out.println("ПК ситилинка, последняя страница - " + lastPage + "\n\n");
+////        int count = 0;
+//        for (int i = 1; i < lastPage + 1; i++) {
+//            String url = "https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=" + String.valueOf(i);
+////            url="https://www.citilink.ru/catalog/computers_and_notebooks/computers/?available=1&status=55395790&p=10";
+////            for (Product product : p.citilink(url, PC.class)) {
+////                pcRepo.findById_product(product.getId_product());
+//            pcRepo.saveAll(p.citilink(url, PC.class));
+////            }
+//            System.out.println(i);
+//        }
+//        System.out.println("final");
+////        return "greeting";
+        citilink_pc();
+        return "redirect:/";
+    }
+
+    @PostMapping("/citilink_monitor")
+    public String greetingParseCitilink_Monitor(Map<String, Object> model) throws IOException, InterruptedException, URISyntaxException {
+//        String url1 = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors/?available=1&status=55395790&p=1";
+//        Parser p = new Parser();
+//        Document page = p.getPage(url1);
+//        int lastPage = Integer.parseInt(page.selectFirst("div[class=page_listing]").selectFirst("li[class=last]").selectFirst("a").attr("data-page"));
+//        System.out.println("Мониторы ситилинка, последняя страница - " + lastPage + "\n\n");
+//        for (int i = 1; i < lastPage + 1; i++) {//7
+//            String url = "https://www.citilink.ru/catalog/computers_and_notebooks/monitors/?available=1&status=55395790&p=" + String.valueOf(i);
+////            List<Product> pl = p.citilink(url, Monitor.class);
+////            for (Product prod : pl) {
+//            monitorRepo.saveAll(p.citilink(url, Monitor.class));
+////            System.out.println(1);
+////            }
+//
+//            System.out.println(i);
+//
+//        }
+//        System.out.println("final");
+        citilink_monitor();
         return "redirect:/";
     }
 
