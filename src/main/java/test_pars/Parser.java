@@ -40,11 +40,11 @@ public class Parser {
 //            Process process = null;
 //            RemoteWebDriver driver = null;
 //            try {
-//                process = new ProcessBuilder("C:\\Users\\sashu\\Desktop\\webSQL-master\\src\\main\\resources\\chromedriver.exe").start();
+//                process = new ProcessBuilder("C:\\Users\\sashu\\Desktop\\webSQL-master\\src\\main\\resources\\chromedriver79.exe").start();
 //            } catch (IOException e1) {
 //                e1.printStackTrace();
 //            }
-//            System.setProperty("webdriver.chrome.driver", "C:\\Users\\sashu\\Desktop\\webSQL-master\\src\\main\\resources\\chromedriver.exe");
+//            System.setProperty("webdriver.chrome.driver", "C:\\Users\\sashu\\Desktop\\webSQL-master\\src\\main\\resources\\chromedriver79.exe");
 //            ChromeOptions options = new ChromeOptions();
 //            try {
 //                driver = new RemoteWebDriver(new URL("http://127.0.0.1:9515"), options);
@@ -52,7 +52,7 @@ public class Parser {
 //                es.printStackTrace();
 //            }
 
-            System.setProperty("webdriver.chrome.driver", "C:\\Users\\sashu\\Desktop\\webSQL-master\\src\\main\\resources\\chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", "C:\\Users\\sashu\\IdeaProjects\\Parser\\src\\main\\resources\\chromedriver80.exe");
 //            ChromeOptions options = new ChromeOptions();
 //            RemoteWebDriver driver =  driver = new RemoteWebDriver(new URL("http://127.0.0.1:9515"), options);
             ChromeDriver driver = new ChromeDriver();
