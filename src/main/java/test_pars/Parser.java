@@ -68,7 +68,7 @@ public class Parser {
                 driver.close();
             } catch (Exception e1) {
                 driver.close();
-                e.printStackTrace();
+//                e.printStackTrace();
             }
 
 
@@ -310,8 +310,14 @@ public class Parser {
             Element content = page1.selectFirst("div[class=specification_view product_view]");
 
             String[] split;
+            BigDecimal price1 = null;
+            try {
+                price1 = new BigDecimal(Integer.parseInt(price.replace(" ", "")));
+            } catch (Exception exep) {
+                exep.printStackTrace();
+            }
             if (clazz == PC.class) {
-                PC product = new PC(0L, "pc", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                PC product = new PC(0L, "pc", "citilink", shortImg, name, shortDescription, linkOnFullDescription, price1);
                 split = shortDescription.split("; ");
                 setPC_citilink(product, split);
 
@@ -365,7 +371,7 @@ public class Parser {
 
             }
             if (clazz == Monitor.class) {
-                Monitor product = new Monitor(0L, "monitor", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                Monitor product = new Monitor(0L, "monitor", "citilink", shortImg, name, shortDescription, linkOnFullDescription, price1);
                 split = shortDescription.split(", ");
                 setMonitor_citilink(product, split);
                 String ss = page1.selectFirst("span[class=product_id]").text().trim() + "4321";
@@ -376,7 +382,7 @@ public class Parser {
                 }
             }
             if (clazz == Printer.class) {
-                Printer product = new Printer(0L, "printer", "citilink", shortImg, name, shortDescription, linkOnFullDescription, new BigDecimal(Integer.parseInt(price.replace(" ", ""))));
+                Printer product = new Printer(0L, "printer", "citilink", shortImg, name, shortDescription, linkOnFullDescription, price1);
                 split = shortDescription.split(", ");
                 setPrinter_citilink(product, split);
                 String ss = page1.selectFirst("span[class=product_id]").text().trim() + "4321";
@@ -409,7 +415,7 @@ public class Parser {
                     product.setRam_model(text1.substring(0, matcher.start()).trim());
                     String ramSize = text1.substring(matcher.start(), matcher.end() - 6) + " ГБ";
                     if (ramSize.equals(" ГБ")) {
-                        product.setRam_size("0." + text1.substring(matcher.start(), matcher.end() - 3) + " ГБ");
+                        product.setRam_size(("0." + text1.substring(matcher.start(), matcher.end() - 3) + " ГБ").trim());
                     } else
                         product.setRam_size(ramSize);
                     product.setRam_frequency(text1.substring(matcher.end()));
@@ -497,7 +503,7 @@ public class Parser {
                     product.setScreen_frequency(Integer.parseInt(str.replace("частота: ", "").replace("Гц", "").trim()));
                 if (str.contains("матрица ")) {
                     String[] arr = str.replace("матрица ", "").split(" ");
-                    product.setScreen_resolution(arr[arr.length - 1]);
+                    product.setScreen_resolution(arr[arr.length - 1].replace("×","x"));
                     product.setMatrix_type(arr[0]);
                 }
                 if (str.contains("отношением сторон "))
@@ -581,7 +587,12 @@ public class Parser {
                 if (str.contains("двусторонняя печать"))
                     product.setTwo_sided_printing("есть");
             }
-            product.setConnector(connector.substring(0, connector.length() - 2));
+            try {
+                product.setConnector(connector.substring(0, connector.length() - 2));
+            } catch (Exception e) {
+                System.out.println("Ошибка в сторке " + connector + " выходит за границы массива \"connector.length() - 2\"");
+                product.setConnector(null);
+            }
         }
         return product;
     }

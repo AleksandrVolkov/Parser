@@ -107,6 +107,8 @@ public class MainController {
         }
         lisNumPages1.sort(Integer::compareTo);
         lastPage = lisNumPages1.get(lisNumPages1.size() - 1);
+        System.out.println("Принтеры ситилинка, последняя страница - " + lastPage + "\n\n");
+
         System.out.println("Начинаем парсить принтеры в ситилинке");
 
         for (int i = 1; i < lastPage + 1; i++) {
@@ -271,7 +273,7 @@ public class MainController {
 
         } catch (Exception e) {
             lastPage = 1;
-            e.printStackTrace();
+            System.out.println("Ошибка в чтении div[id=products-list-pagination], по дефолту стр. = 1");
         }
         System.out.println("Принтеры dns, последняя страница - " + lastPage + "\n\n");
 
